@@ -35,8 +35,9 @@ export const projectsData: Project[] = [
       "Developed a Revit plugin using C# and the Revit API that automates rebar placement based on predefined rules, generates accurate bar bending schedules, and ensures compliance with structural standards. The plugin features an intuitive WPF interface for parameter configuration.",
     results:
       "Reduced rebar detailing time by 70%. Eliminated common placement errors. Standardized output across all projects. Currently used by multiple engineering teams.",
-    coverImage: "/images/projects/rebarx-cover.png",
-    gallery: ["/images/projects/rebarx-1.png", "/images/projects/rebarx-2.png"],
+    coverImage: "/images/projects/project-scorecard.png",
+    gallery: ["/images/projects/project-scorecard.png"],
+
     technologies: ["C#", "Revit API", "WPF", "MVVM", ".NET"],
     category: "BIM Automation",
     tags: ["Revit", "Plugin", "Structural", "Automation"],
