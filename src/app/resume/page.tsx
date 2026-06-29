@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import type { Experience, Education, Certification } from "@/data/experience";
