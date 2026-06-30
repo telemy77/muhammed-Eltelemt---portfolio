@@ -1,485 +1,391 @@
 "use client";
 
-import { useRef } from "react";
-import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
-  Code2,
-  Building2,
-  Cpu,
+  Download,
+  Github,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+  ChevronDown,
   ExternalLink,
-  Calendar,
-  ChevronRight,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { SectionHeading } from "@/components/shared/SectionHeading";
-import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
-import { techStackLogos } from "@/data/skills";
 import { siteConfig, stats } from "@/lib/constants";
-import { formatDate, cn } from "@/lib/utils";
-import { db } from "@/lib/db";
-import { Project } from "@/data/projects";
-import { BlogPost } from "@/data/blog";
-
+import { projectsData } from "@/data/projects";
+import type { Project } from "@/data/projects";
 
 export default function HomePage() {
-  return (
-    <>
-      <HeroSection />
-      <FeaturedProjects />
-      <StatsSection />
-      <TechStackSection />
-      <LatestBlog />
-      <ContactCTA />
-    </>
+  const [projects, setProjects] = useState<Project[]>(
+    projectsData.filter((p) => p.featured).slice(0, 3)
   );
-}
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
-/* ─── Hero Section ─── */
-function HeroSection() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 150]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 28 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        {/* Grid pattern */}
-        <div className="absolute inset-0 grid-pattern opacity-50" />
+    <main className="bg-[#0F172A] text-white min-h-screen">
+      {/* ─── HERO ─────────────────────────────────────────────── */}
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        {/* Subtle radial gradient background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-[#00D9FF]/6 blur-[120px]" />
+        </div>
 
-        {/* Gradient orbs */}
         <motion.div
-          animate={{
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00D9FF]/10 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, -20, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#0066FF]/10 rounded-full blur-[120px]"
-        />
-
-        {/* Floating geometric shapes */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 rounded-full bg-[#00D9FF]/30"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${30 + i * 10}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.3, 0.8, 0.3],
-            }}
-            transition={{
-              duration: 3 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-      </div>
-
-      <motion.div style={{ y, opacity }} className="relative z-10 section-container text-center">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse_dot" />
-          <span className="text-sm text-slate-300">
-            Open to opportunities
-          </span>
-        </motion.div>
-
-        {/* Main Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-playfair leading-tight mb-6"
-        >
-          Building Software
-          <br />
-          <span className="gradient-text">That Automates</span>
-          <br />
-          Engineering
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          Civil Engineer → Software Developer specializing in{" "}
-          <span className="text-[#00D9FF]">BIM Automation</span>,{" "}
-          <span className="text-[#00D9FF]">Revit API</span>, and{" "}
-          engineering workflow optimization.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <Link href="/projects" className="btn-primary text-base px-8 py-4">
-            View Projects
-            <ArrowRight size={18} />
-          </Link>
-          <Link href="/contact" className="btn-secondary text-base px-8 py-4">
-            Get in Touch
-          </Link>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          style={{ opacity: heroOpacity, y: heroY }}
+          className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-24 pb-16"
         >
           <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20"
           >
-            <div className="w-1 h-2 rounded-full bg-[#00D9FF]" />
+            {/* Photo */}
+            <motion.div variants={itemVariants} className="flex-shrink-0">
+              <div className="relative">
+                {/* Glow ring */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00D9FF]/40 to-transparent blur-2xl scale-110" />
+                <div className="relative w-52 h-52 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-[#00D9FF]/30 shadow-2xl shadow-[#00D9FF]/10">
+                  <Image
+                    src="/images/profile.jpg"
+                    alt="Mohamed El-Telemy"
+                    fill
+                    className="object-cover object-top"
+                    priority
+                  />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Text */}
+            <div className="text-center lg:text-left">
+              <motion.p
+                variants={itemVariants}
+                className="text-[#00D9FF] text-sm font-medium tracking-widest uppercase mb-3"
+              >
+                BIM Automation Developer · Cairo, Egypt
+              </motion.p>
+
+              <motion.h1
+                variants={itemVariants}
+                className="text-5xl md:text-6xl lg:text-7xl font-bold font-playfair leading-tight mb-4"
+              >
+                Mohamed
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D9FF] to-[#0066FF]">
+                  El-Telemy
+                </span>
+              </motion.h1>
+
+              <motion.p
+                variants={itemVariants}
+                className="text-slate-400 text-lg md:text-xl max-w-xl mb-8 leading-relaxed"
+              >
+                Civil Engineer turned software developer — building{" "}
+                <span className="text-white font-medium">Revit API add-ins</span>,{" "}
+                <span className="text-white font-medium">WPF desktop apps</span>, and{" "}
+                <span className="text-white font-medium">BIM automation tools</span> that
+                eliminate manual engineering work.
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8"
+              >
+                <Link
+                  href="/projects"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#00D9FF] text-[#0F172A] font-semibold rounded-xl hover:bg-white transition-colors duration-200 text-sm"
+                >
+                  View Projects <ArrowRight size={15} />
+                </Link>
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-semibold rounded-xl hover:border-[#00D9FF]/50 hover:bg-white/5 transition-all duration-200 text-sm"
+                >
+                  <Download size={15} /> Resume
+                </a>
+              </motion.div>
+
+              {/* Social + Contact */}
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-wrap gap-4 justify-center lg:justify-start text-sm text-slate-400"
+              >
+                <a
+                  href={siteConfig.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-[#00D9FF] transition-colors"
+                >
+                  <Linkedin size={14} /> LinkedIn
+                </a>
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="flex items-center gap-1.5 hover:text-[#00D9FF] transition-colors"
+                >
+                  <Mail size={14} /> {siteConfig.email}
+                </a>
+                <a
+                  href={`tel:${siteConfig.phone}`}
+                  className="flex items-center gap-1.5 hover:text-[#00D9FF] transition-colors"
+                >
+                  <Phone size={14} /> {siteConfig.phone}
+                </a>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Scroll cue */}
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center mt-16 lg:mt-20"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="text-slate-600"
+            >
+              <ChevronDown size={24} />
+            </motion.div>
           </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
-  );
-}
+      </section>
 
-/* ─── Featured Projects ─── */
-function FeaturedProjects() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [featured, setFeatured] = useState<Project[]>([]);
+      {/* ─── STATS ────────────────────────────────────────────── */}
+      <section className="py-16 border-y border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                className="text-center"
+              >
+                <div className="text-3xl md:text-4xl font-bold text-[#00D9FF] font-playfair mb-1">
+                  {s.value}{s.suffix}
+                </div>
+                <div className="text-xs text-slate-500 uppercase tracking-wide">{s.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-  useEffect(() => {
-    setFeatured(db.getProjects().filter((p) => p.featured).slice(0, 4));
-  }, []);
+      {/* ─── FEATURED PROJECTS ────────────────────────────────── */}
+      <section className="py-20 max-w-5xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-12"
+        >
+          <p className="text-[#00D9FF] text-xs font-medium tracking-widest uppercase mb-2">
+            Selected Work
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold font-playfair">Featured Projects</h2>
+        </motion.div>
 
-
-  return (
-    <section ref={ref} className="py-24 relative">
-      <div className="section-container">
-        <SectionHeading
-          title="Featured Projects"
-          subtitle="A selection of my best work in BIM automation and software development"
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {featured.map((project, index) => (
+        <div className="space-y-4">
+          {projects.map((project, i) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
             >
               <Link
                 href={`/projects/${project.slug}`}
-                className="group block glass-card overflow-hidden glow-hover transition-all duration-500 hover:scale-[1.02]"
+                className="group flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 rounded-2xl border border-white/8 hover:border-[#00D9FF]/30 hover:bg-white/3 transition-all duration-300"
               >
-                {/* Image */}
-                <div className="relative h-56 overflow-hidden">
+                {/* Thumbnail */}
+                <div className="relative w-full sm:w-20 h-36 sm:h-14 rounded-xl overflow-hidden bg-slate-800 flex-shrink-0">
                   <Image
                     src={project.coverImage}
                     alt={project.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="tag">{project.category}</span>
-                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#00D9FF] transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.slice(0, 4).map((tech) => (
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <h3 className="font-semibold text-white group-hover:text-[#00D9FF] transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-sm text-slate-400 mt-0.5 line-clamp-1">
+                        {project.description}
+                      </p>
+                    </div>
+                    <ExternalLink
+                      size={15}
+                      className="text-slate-600 group-hover:text-[#00D9FF] transition-colors flex-shrink-0 mt-0.5"
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {project.technologies.slice(0, 4).map((t) => (
                       <span
-                        key={tech}
-                        className="px-2 py-0.5 rounded-md text-xs bg-white/5 text-slate-300 border border-white/10"
+                        key={t}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400 border border-white/8"
                       >
-                        {tech}
+                        {t}
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center text-[#00D9FF] text-sm font-medium">
-                    View Case Study
-                    <ChevronRight
-                      size={16}
-                      className="ml-1 group-hover:translate-x-1 transition-transform"
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-8 text-center"
+        >
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-[#00D9FF] transition-colors"
+          >
+            View all projects <ArrowRight size={14} />
+          </Link>
+        </motion.div>
+      </section>
+
+      {/* ─── ABOUT SNIPPET ────────────────────────────────────── */}
+      <section className="py-20 border-t border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <p className="text-[#00D9FF] text-xs font-medium tracking-widest uppercase mb-2">
+                About
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-5">
+                Engineer who codes.
+              </h2>
+              <p className="text-slate-400 leading-relaxed mb-4">
+                I graduated in Civil Engineering from Mansoura University (2023) and spent two years as a
+                Highway Design Engineer. Then I joined the{" "}
+                <span className="text-white">ITI BIM Automation Developer Program</span> — a 460-hour
+                intensive where I mastered C#, Revit API, WPF, and software design for the AEC world.
+              </p>
+              <p className="text-slate-400 leading-relaxed mb-6">
+                I build tools that solve real engineering problems: plugins that automate rebar detailing,
+                desktop apps that replace spreadsheets, and BIM utilities that make coordinators faster.
+              </p>
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 text-sm text-[#00D9FF] hover:underline"
+              >
+                More about me <ArrowRight size={14} />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-3"
+            >
+              {[
+                { label: "C# / .NET / WPF", bar: 90 },
+                { label: "Revit API", bar: 90 },
+                { label: "MVVM Architecture", bar: 87 },
+                { label: "Entity Framework Core", bar: 82 },
+                { label: "BIM Automation Workflows", bar: 88 },
+              ].map((skill, i) => (
+                <div key={skill.label}>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-slate-300">{skill.label}</span>
+                    <span className="text-slate-500">{skill.bar}%</span>
+                  </div>
+                  <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.bar}%` }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.08, duration: 0.8, ease: "easeOut" }}
+                      className="h-full rounded-full bg-gradient-to-r from-[#00D9FF] to-[#0066FF]"
                     />
                   </div>
                 </div>
-              </Link>
+              ))}
             </motion.div>
-          ))}
-        </div>
-
-        {/* View All */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-12"
-        >
-          <Link href="/projects" className="btn-secondary">
-            View All Projects
-            <ArrowRight size={16} />
-          </Link>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Stats Section ─── */
-function StatsSection() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <section ref={ref} className="py-24 relative">
-      {/* Background accent */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00D9FF]/[0.02] to-transparent" />
-
-      <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="glass-card p-12 md:p-16"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {stats.map((stat) => (
-              <AnimatedCounter
-                key={stat.label}
-                value={stat.value}
-                suffix={stat.suffix}
-                label={stat.label}
-              />
-            ))}
           </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Tech Stack Section ─── */
-function TechStackSection() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const categories = ["Language", "Framework", "BIM", "Database", "Tool"];
-  const categoryIcons: Record<string, React.ReactNode> = {
-    Language: <Code2 size={16} />,
-    Framework: <Cpu size={16} />,
-    BIM: <Building2 size={16} />,
-    Database: <Cpu size={16} />,
-    Tool: <Code2 size={16} />,
-  };
-
-  return (
-    <section ref={ref} className="py-24">
-      <div className="section-container">
-        <SectionHeading
-          title="Technology Stack"
-          subtitle="The tools and technologies I use to build powerful solutions"
-        />
-
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-          {techStackLogos.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="glass-card p-4 text-center group hover:border-[#00D9FF]/50 glow-hover transition-all duration-300 hover:scale-105"
-            >
-              <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-gradient-to-br from-[#00D9FF]/20 to-[#0066FF]/20 flex items-center justify-center text-[#00D9FF]">
-                {categoryIcons[tech.category] || <Code2 size={16} />}
-              </div>
-              <p className="text-white text-sm font-medium">{tech.name}</p>
-              <p className="text-slate-500 text-xs mt-1">{tech.category}</p>
-            </motion.div>
-          ))}
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* ─── Latest Blog ─── */
-function LatestBlog() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [latestPosts, setLatestPosts] = useState<BlogPost[]>([]);
-
-  useEffect(() => {
-    setLatestPosts(
-      db.getBlogPosts()
-        .filter((p) => p.status === "published")
-        .slice(0, 3)
-    );
-  }, []);
-
-
-  return (
-    <section ref={ref} className="py-24">
-      <div className="section-container">
-        <SectionHeading
-          title="Latest Articles"
-          subtitle="Thoughts on BIM automation, software development, and engineering"
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {latestPosts.map((post, index) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-            >
+      {/* ─── CTA ──────────────────────────────────────────────── */}
+      <section className="py-20 border-t border-white/5">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-4">
+              Let's work together
+            </h2>
+            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+              Open to opportunities in BIM software development, AEC tool building, and engineering
+              automation.
+            </p>
+            <div className="flex flex-wrap gap-3 justify-center">
               <Link
-                href={`/blog/${post.slug}`}
-                className="group block glass-card overflow-hidden glow-hover transition-all duration-300 hover:scale-[1.02] h-full"
+                href="/contact"
+                className="flex items-center gap-2 px-6 py-3 bg-[#00D9FF] text-[#0F172A] font-semibold rounded-xl hover:bg-white transition-colors duration-200 text-sm"
               >
-                {/* Cover placeholder */}
-                <div className="h-48 bg-gradient-to-br from-[#00D9FF]/10 to-[#0066FF]/10 flex items-center justify-center p-6 relative overflow-hidden">
-                  <div className="absolute inset-0 grid-pattern opacity-30" />
-                  <h4 className="text-lg font-playfair text-white/80 text-center relative z-10 line-clamp-3">
-                    {post.title}
-                  </h4>
-                </div>
-
-                <div className="p-6">
-                  <span className="tag text-xs mb-3 inline-block">
-                    {post.category}
-                  </span>
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#00D9FF] transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center gap-3 text-slate-500 text-xs">
-                    <span className="flex items-center gap-1">
-                      <Calendar size={12} />
-                      {formatDate(post.publishedAt)}
-                    </span>
-                    <span>·</span>
-                    <span>{post.readingTime} min read</span>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-          className="text-center mt-12"
-        >
-          <Link href="/blog" className="btn-secondary">
-            Read All Articles
-            <ArrowRight size={16} />
-          </Link>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Contact CTA ─── */
-function ContactCTA() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <section ref={ref} className="py-24">
-      <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="relative overflow-hidden rounded-3xl"
-        >
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#00D9FF]/20 via-[#0066FF]/10 to-[#0F172A]" />
-          <div className="absolute inset-0 grid-pattern opacity-20" />
-
-          <div className="relative z-10 text-center py-20 px-8">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 }}
-              className="text-4xl md:text-5xl font-bold font-playfair mb-4"
-            >
-              Let&apos;s Build Something{" "}
-              <span className="gradient-text">Amazing</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3 }}
-              className="text-lg text-slate-400 max-w-xl mx-auto mb-8"
-            >
-              Have a project in mind? Looking for a BIM automation developer?
-              I&apos;d love to hear from you.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Link href="/contact" className="btn-primary text-base px-8 py-4">
-                Get in Touch
-                <ArrowRight size={18} />
+                Get in touch <Mail size={15} />
               </Link>
               <a
-                href={`mailto:${siteConfig.email}`}
-                className="btn-secondary text-base px-8 py-4"
+                href={siteConfig.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white rounded-xl hover:border-[#00D9FF]/50 hover:bg-white/5 transition-all duration-200 text-sm"
               >
-                <ExternalLink size={16} />
-                {siteConfig.email}
+                <Linkedin size={15} /> LinkedIn
               </a>
-            </motion.div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </main>
   );
 }

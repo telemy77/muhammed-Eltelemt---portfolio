@@ -412,6 +412,49 @@ export default function ProjectDetail({
         </div>
       </section>
 
+      {/* ---- Video Demo Section ---- */}
+      {project.videoUrl && (
+        <section className="py-16 px-6 border-t border-white/5">
+          <div className="max-w-4xl mx-auto">
+            <motion.h2
+              custom={0}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="font-playfair text-2xl md:text-3xl font-bold text-white mb-2 text-center"
+            >
+              Demo
+            </motion.h2>
+            <motion.p
+              custom={1}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="text-slate-500 text-center text-sm mb-8"
+            >
+              Watch the project in action
+            </motion.p>
+            <motion.div
+              custom={2}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="relative rounded-2xl overflow-hidden border border-white/10 bg-black shadow-2xl"
+            >
+              <video
+                src={project.videoUrl}
+                controls
+                className="w-full aspect-video"
+                poster={project.coverImage}
+              />
+            </motion.div>
+          </div>
+        </section>
+      )}
+
       {/* ---- Gallery Section ---- */}
       {project.gallery.length > 1 && (
         <section className="py-24 px-6 bg-[#0F172A]">

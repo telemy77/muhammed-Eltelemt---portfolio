@@ -1,23 +1,24 @@
 export interface Experience {
   id: string;
-  company: string;
   role: string;
-  description: string;
-  achievements: string[];
+  company: string;
+  location: string;
   startDate: string;
-  endDate: string | null;
+  endDate: string;
   current: boolean;
+  description: string;
   technologies: string[];
 }
 
 export interface Education {
   id: string;
-  institution: string;
   degree: string;
-  field: string;
-  description: string;
+  institution: string;
+  location: string;
   startDate: string;
   endDate: string;
+  current: boolean;
+  description: string;
   grade?: string;
 }
 
@@ -32,92 +33,62 @@ export interface Certification {
 export const experienceData: Experience[] = [
   {
     id: "1",
-    company: "Information Technology Institute (ITI)",
-    role: "AEC Developer — Professional Training Program",
-    description:
-      "Intensive 9-month professional development program focused on software engineering for the Architecture, Engineering, and Construction (AEC) industry. Mastered C#, .NET, Revit API, WPF, database design, and modern development practices.",
-    achievements: [
-      "Developed multiple Revit API plugins for BIM automation",
-      "Built WPF desktop applications using MVVM architecture",
-      "Implemented database-driven applications with Entity Framework",
-      "Created Python automation scripts for engineering workflows",
-      "Collaborated on team projects using Git and Agile methodologies",
-    ],
-    startDate: "2025-09",
-    endDate: "2026-06",
+    role: "Junior Highway Design Engineer",
+    company: "PowerCem Technology Regional",
+    location: "Cairo, Egypt",
+    startDate: "Jan 2024",
+    endDate: "Jan 2026",
     current: false,
-    technologies: [
-      "C#",
-      "Revit API",
-      "WPF",
-      ".NET",
-      "Python",
-      "SQL Server",
-      "Entity Framework",
-      "Git",
-    ],
-  },
-  {
-    id: "2",
-    company: "Civil Engineering Projects",
-    role: "Civil Engineer",
     description:
-      "Worked on structural engineering projects including reinforced concrete design, site supervision, and construction management. Gained hands-on experience with BIM workflows and identified opportunities for software automation.",
-    achievements: [
-      "Supervised construction of residential and commercial structures",
-      "Performed structural analysis and reinforced concrete design",
-      "Managed quality control inspections on-site",
-      "Identified repetitive workflows that could be automated with software",
-      "Began self-learning Revit API development to solve engineering problems",
-    ],
-    startDate: "2022-01",
-    endDate: "2025-08",
-    current: false,
-    technologies: [
-      "AutoCAD",
-      "Revit",
-      "Structural Analysis",
-      "Reinforced Concrete",
-      "BIM",
-    ],
+      "Specialized in advanced road reclamation (Full Depth Reclamation — FDR) and diagnostic pavement evaluations. Worked on road condition assessments and technical documentation for infrastructure rehabilitation projects.",
+    technologies: ["Highway Design", "FDR", "Pavement Evaluation", "AutoCAD"],
   },
 ];
 
 export const educationData: Education[] = [
   {
     id: "1",
+    degree: "BIM Automation Developer Program",
     institution: "Information Technology Institute (ITI)",
-    degree: "Professional Diploma",
-    field: "AEC Software Development",
+    location: "Cairo, Egypt",
+    startDate: "2026",
+    endDate: "Present",
+    current: true,
     description:
-      "9-month intensive program covering C#, .NET development, Revit API, database design, and software engineering best practices for the AEC industry.",
-    startDate: "2025-09",
-    endDate: "2026-06",
+      "460-hour intensive program focused on software development and BIM automation. Key topics: C#, .NET, OOP, Data Structures & Algorithms, Desktop Application Development, Revit API, AutoCAD API, Dynamo, IFC & xBIM, Database Fundamentals, Generative AI & Prompt Engineering. Project-based learning with real-world BIM automation solutions.",
+    grade: "In Progress",
   },
   {
     id: "2",
-    institution: "University",
-    degree: "Bachelor of Science",
-    field: "Civil Engineering",
+    degree: "Preliminary MA — Public Works Engineering",
+    institution: "Mansoura University",
+    location: "Mansoura, Egypt",
+    startDate: "2023",
+    endDate: "Present",
+    current: true,
     description:
-      "Comprehensive civil engineering education covering structural analysis, reinforced concrete design, construction management, geotechnical engineering, and surveying.",
-    startDate: "2017",
-    endDate: "2022",
-    grade: "Good",
+      "Specialization in Highway and Airport Engineering at the Public Works Engineering Department.",
+    grade: "Excellent",
+  },
+  {
+    id: "3",
+    degree: "Bachelor of Science in Civil Engineering",
+    institution: "Mansoura University",
+    location: "Mansoura, Egypt",
+    startDate: "2018",
+    endDate: "2023",
+    current: false,
+    description:
+      "Graduation Project: Highway & Airport — Superpave Asphalt Mix Designs. Comprehensive study of structural, geotechnical, highway, and construction engineering.",
+    grade: "Excellent",
   },
 ];
 
 export const certificationsData: Certification[] = [
   {
     id: "1",
-    name: "ITI AEC Developer Program",
-    issuer: "Information Technology Institute",
-    date: "2026-06",
-  },
-  {
-    id: "2",
-    name: "Autodesk Certified Professional — Revit",
-    issuer: "Autodesk",
-    date: "2025",
+    name: "BIM Automation Developer Program",
+    issuer: "Information Technology Institute (ITI)",
+    date: "2026",
   },
 ];

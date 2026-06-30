@@ -1,24 +1,28 @@
 export const siteConfig = {
   name: "Mohamed El-Telemy",
+  fullName: "Mohamed Ahmed El-Telemy",
   title: "Mohamed El-Telemy — BIM Automation Developer & Civil Engineer",
+  headline: "BIM Automation Developer",
+  subheadline: "Civil Engineer · C# · Revit API · WPF",
   description:
-    "Civil Engineer turned Software Developer specializing in BIM Automation, Revit API, and engineering workflow optimization. Building software that automates engineering workflows.",
+    "BIM Automation Developer with a Civil Engineering background, specializing in Revit API add-ins, WPF desktop applications, and automation solutions for the AEC industry.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  email: "mohamed.eltelemy@outlook.com",
-  phone: "+20 1234 567 890",
+  email: "muhammed.eltelemy@gmail.com",
+  phone: "+20 114 768 6582",
   location: "Cairo, Egypt",
   social: {
     github: "https://github.com/mohamedeltelemy",
-    linkedin: "https://linkedin.com/in/mohamedeltelemy",
+    linkedin: "https://www.linkedin.com/in/mohamed-eltelemy-76a1172b0/",
   },
   keywords: [
     "BIM Automation",
     "Revit API",
     "Civil Engineer",
-    "Software Developer",
+    "BIM Developer",
     "C#",
-    "Python",
+    ".NET",
     "WPF",
+    "MVVM",
     "AEC Developer",
     "Building Information Modeling",
     "Autodesk Revit",
@@ -32,13 +36,12 @@ export const navLinks = [
   { label: "Projects", href: "/projects" },
   { label: "Experience", href: "/experience" },
   { label: "Skills", href: "/skills" },
-  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
 export const stats = [
-  { label: "Projects Completed", value: 12, suffix: "+" },
-  { label: "Years Experience", value: 4, suffix: "+" },
+  { label: "BIM Projects Built", value: 6, suffix: "+" },
+  { label: "Hours ITI Training", value: 460, suffix: "" },
+  { label: "Years Engineering", value: 5, suffix: "+" },
   { label: "Technologies", value: 15, suffix: "+" },
-  { label: "Articles Written", value: 8, suffix: "" },
 ] as const;

@@ -11,6 +11,7 @@ export interface Project {
   gallery: string[];
   videoUrl?: string;
   youtubeUrl?: string;
+  logoImage?: string;
   technologies: string[];
   category: string;
   tags: string[];
@@ -26,112 +27,113 @@ export const projectsData: Project[] = [
     slug: "rebarx",
     title: "RebarX",
     description:
-      "Advanced Revit plugin for automated rebar detailing and scheduling in reinforced concrete structures.",
+      "Revit API add-in that automates 3D structural reinforcement detailing for footings, columns, beams, and slabs — reducing manual drafting time by up to 70%.",
     overview:
-      "RebarX is a powerful Autodesk Revit plugin built with C# and the Revit API that automates the entire rebar detailing workflow. From automatic bar placement to comprehensive scheduling, RebarX eliminates hours of manual work for structural engineers.",
+      "RebarX is an Autodesk Revit API add-in built with C#, .NET Framework, and WPF/MVVM that automates the generation of 3D reinforcement detailing for structural elements including isolated footings, columns, continuous and projected beams, and flat slabs. It enforces the Egyptian Concrete Code (ECP 203), automates lap splice calculations, generates procurement-ready BOM exports in CSV, and features a custom branded Ribbon panel.",
     challenge:
-      "Structural engineers spend 40-60% of their detailing time on repetitive rebar placement and scheduling tasks in Revit. Manual processes are error-prone, time-consuming, and inconsistent across projects.",
+      "Structural engineers spend 40–60% of their detailing time on repetitive rebar placement, splice calculations, and scheduling tasks in Revit. Manual processes are error-prone, time-consuming, and inconsistent across projects. Code compliance checks are often done manually after the fact.",
     solution:
-      "Developed a Revit plugin using C# and the Revit API that automates rebar placement based on predefined rules, generates accurate bar bending schedules, and ensures compliance with structural standards. The plugin features an intuitive WPF interface for parameter configuration.",
+      "Developed parametric detailing rules compliant with ECP 203, automating development lengths (Ld), tension/compression lap splices, hooks (90°, 135°, 180°), and seismic confinement zones. Built an intelligent commercial rebar slicing algorithm that partitions longitudinal bars into standard 12-meter lengths and staggers splices to minimize scrap. An automated scheduling engine generates structured BOM exports in CSV.",
     results:
-      "Reduced rebar detailing time by 70%. Eliminated common placement errors. Standardized output across all projects. Currently used by multiple engineering teams.",
-    coverImage: "/images/projects/project-scorecard.png",
-    gallery: ["/images/projects/project-scorecard.png"],
-
-    technologies: ["C#", "Revit API", "WPF", "MVVM", ".NET"],
+      "Reduced rebar detailing time by up to 70%. Eliminated placement errors and code violations. Generated procurement-ready BOM exports automatically. Integrated asynchronous execution to keep Revit responsive during generation.",
+    coverImage: "/images/projects/rebarx-logo.png",
+    logoImage: "/images/projects/rebarx-logo.png",
+    gallery: ["/images/projects/rebarx-logo.png"],
+    videoUrl: "/videos/rebarx-demo.mp4",
+    technologies: ["C#", ".NET Framework", "Revit API", "WPF", "MVVM"],
     category: "BIM Automation",
-    tags: ["Revit", "Plugin", "Structural", "Automation"],
+    tags: ["Revit", "Structural", "Reinforcement", "Automation", "ECP 203"],
     featured: true,
     status: "published",
-    createdAt: "2025-06-15",
-    updatedAt: "2025-06-15",
+    createdAt: "2026-01-01",
+    updatedAt: "2026-06-01",
   },
   {
     id: "2",
     slug: "project-scorecard",
     title: "Project Scorecard",
     description:
-      "Revit plugin that generates comprehensive project analytics — levels, walls, openings, spaces, and wall types at a glance.",
+      "Revit API add-in that generates automated BIM model health reports with element counts, categories, levels, and performance indicators.",
     overview:
-      "Project Scorecard is a Revit plugin that analyzes your BIM model and generates a comprehensive scorecard showing project structure metrics: number of levels, walls, openings (doors, windows), spaces (rooms), wall types, and computed ratios like door-to-wall percentage.",
+      "Project Scorecard is a Revit API add-in using C# and .NET that generates automated BIM model health reports. It extracts model metadata including levels, categories, element counts, and project statistics, providing centralized project insights and performance indicators for BIM coordinators and project managers.",
     challenge:
-      "Project managers and BIM coordinators need quick visibility into project complexity and model health, but extracting these metrics from Revit manually requires navigating multiple schedules and views.",
+      "Project managers and BIM coordinators need quick visibility into project complexity and model health, but extracting metrics from Revit manually requires navigating multiple schedules and views — a slow and fragmented process.",
     solution:
-      "Built a one-click Revit command that scans the entire model and displays a formatted scorecard dialog. Uses the Revit API to query filtered element collectors for levels, walls, doors, windows, rooms, and wall types, computing summary statistics automatically.",
+      "Built a one-click Revit command that scans the entire model and displays a formatted scorecard. Uses the Revit API to query filtered element collectors for levels, walls, doors, windows, rooms, and wall types, computing summary statistics automatically. Applied OOP principles to ensure maintainability and scalability.",
     results:
-      "Provides instant project overview in seconds. Helps BIM managers assess model completeness. Used for project handoff documentation and quality checks.",
+      "Provides instant project overview. Improves model review efficiency with centralized insights. Supports BIM handoff documentation and quality checks.",
     coverImage: "/images/projects/project-scorecard.png",
     gallery: ["/images/projects/project-scorecard.png"],
-    technologies: ["C#", "Revit API", "WPF", ".NET"],
+    technologies: ["C#", ".NET", "Revit API", "WPF"],
     category: "BIM Automation",
-    tags: ["Revit", "Plugin", "Analytics", "BIM Management"],
+    tags: ["Revit", "BIM Health", "Analytics", "Model Review"],
     featured: true,
     status: "published",
-    createdAt: "2025-05-20",
-    updatedAt: "2025-05-20",
+    createdAt: "2025-10-01",
+    updatedAt: "2025-10-01",
   },
   {
     id: "3",
     slug: "comment-stamper",
     title: "Comment Stamper",
     description:
-      "Revit plugin for batch-updating comment parameters across hundreds of elements with timestamped review marks.",
+      "Revit API add-in for bulk parameter management — automates comment and review status updates across large groups of model elements.",
     overview:
-      "Comment Stamper automates the review process in Revit by batch-updating the Comments parameter on selected elements. It stamps a 'Reviewed: [date]' tag on all walls (or any selected elements), making coordination tracking effortless.",
+      "Comment Stamper is a bulk parameter management tool built with the Autodesk Revit API. It automates comment and review status updates across large groups of model elements, reducing repetitive manual operations and improving BIM coordination workflows.",
     challenge:
-      "During design review and coordination, engineers need to mark hundreds of elements as reviewed. Doing this manually element-by-element is tedious and error-prone, especially in large models with 100+ walls.",
+      "During design review, engineers need to mark hundreds of elements as reviewed. Doing this manually element-by-element is tedious and error-prone, especially in large models with 100+ walls.",
     solution:
-      "Created a Revit plugin that selects all walls in the active view and batch-updates their Comments parameter with a timestamped review note. The plugin provides a summary dialog showing how many elements were updated.",
+      "Created a Revit plugin that selects all walls in the active view and batch-updates their Comments parameter with a timestamped review note. Provides a summary dialog showing how many elements were updated.",
     results:
-      "Updated 144 walls in one click (as demonstrated). Saves hours of manual parameter editing. Ensures consistent review documentation across the model.",
+      "Updated 144 walls in a single click. Saves hours of manual parameter editing. Ensures consistent review documentation across the model.",
     coverImage: "/images/projects/comment-stamper.png",
     gallery: ["/images/projects/comment-stamper.png"],
-    technologies: ["C#", "Revit API", ".NET"],
+    technologies: ["C#", ".NET", "Revit API"],
     category: "BIM Automation",
-    tags: ["Revit", "Plugin", "Review", "Batch Processing"],
+    tags: ["Revit", "Batch Processing", "Review", "Coordination"],
     featured: true,
     status: "published",
-    createdAt: "2026-03-18",
-    updatedAt: "2026-03-18",
+    createdAt: "2025-11-01",
+    updatedAt: "2025-11-01",
   },
   {
     id: "4",
     slug: "wall-data-export",
-    title: "Wall Data Export (BIM Auditor)",
+    title: "Wall Data Export",
     description:
-      "Revit plugin that extracts comprehensive wall data — type, thickness, length, area, height, level — into a structured table for audit and analysis.",
+      "Revit API add-in that extracts structured wall data — dimensions, types, levels, and parameters — to Excel for reporting and engineering analysis.",
     overview:
-      "The BIM Auditor - Wall Analyzer scans all walls in a Revit model and exports their properties (type, thickness, length, area, height, level) into a structured, sortable table. Includes marking/flagging capabilities for wall audit workflows.",
+      "The Wall Data Export tool collects structured wall information from Revit models and exports dimensions, types, levels, and related parameters to Excel for reporting and engineering analysis. Implements reusable data processing components to support future automation solutions.",
     challenge:
-      "BIM auditors need to verify wall properties across large models for clash detection, quantity takeoff, and code compliance. Revit's built-in schedules lack the flexibility and presentation needed for audit workflows.",
+      "BIM auditors need to verify wall properties across large models for clash detection, quantity takeoff, and code compliance. Revit's built-in schedules lack the flexibility for detailed audit workflows.",
     solution:
-      "Developed a wall analysis tool that uses filtered element collectors to extract all wall instances, parses their geometric and type properties, and presents them in a clean tabular format with warning flags for out-of-spec elements.",
+      "Developed a wall analysis tool that uses filtered element collectors to extract all wall instances, parses geometric and type properties, and presents them in a clean tabular format with warning flags for out-of-spec elements.",
     results:
-      "Analyzed 143 walls with full property breakdown. Enabled rapid identification of non-compliant walls. Streamlined the BIM audit process for quality assurance teams.",
+      "Analyzed 143 walls with full property breakdown. Enabled rapid identification of non-compliant elements. Streamlined the BIM audit and quality assurance process.",
     coverImage: "/images/projects/wall-data-export.png",
     gallery: ["/images/projects/wall-data-export.png"],
-    technologies: ["C#", "Revit API", "WPF", ".NET"],
+    technologies: ["C#", ".NET", "Revit API", "WPF", "Excel Integration"],
     category: "BIM Automation",
-    tags: ["Revit", "Plugin", "Audit", "Data Export"],
+    tags: ["Revit", "Data Export", "Audit", "Excel"],
     featured: false,
     status: "published",
-    createdAt: "2025-04-10",
-    updatedAt: "2025-04-10",
+    createdAt: "2025-09-01",
+    updatedAt: "2025-09-01",
   },
   {
     id: "5",
     slug: "building-inspection-tracker",
     title: "Building Inspection Tracker",
     description:
-      "WPF desktop application for managing building inspections — create checklists, track results, and generate inspection reports.",
+      "WPF desktop application with MVVM architecture for inspection tracking, checklist management, data filtering, and statistical reporting.",
     overview:
-      "A full-featured WPF desktop application built with C# and MVVM architecture for construction site inspection management. Features a New Inspection builder with customizable checklists and an Inspection History view with filtering and statistics.",
+      "A full-featured WPF desktop application built with C# and MVVM architecture for construction site inspection management. Features a New Inspection builder with customizable checklists and an Inspection History view with filtering and statistics. Applies software design principles and separation of concerns.",
     challenge:
       "Construction inspectors track building inspections using paper forms and spreadsheets, leading to data loss, inconsistent records, and no real-time visibility into pass/fail rates across projects.",
     solution:
-      "Built a WPF application with two main views: (1) New Inspection Builder for creating inspections with project details, inspector info, and dynamic checklist items with Pass/Fail/N/A status, and (2) Inspection History for browsing, filtering, and analyzing past inspections with live statistics.",
+      "Built a WPF application with two main views: a New Inspection Builder for creating inspections with project details and dynamic checklist items (Pass/Fail/N/A), and an Inspection History view for browsing, filtering, and analyzing past inspections with live statistics.",
     results:
-      "Provides real-time pass rate tracking. Supports multiple inspection types (Structural, Electrical, etc.). Clean MVVM architecture with Relay Commands. Live statistics dashboard.",
+      "Real-time pass rate tracking. Supports multiple inspection types (Structural, Electrical, etc.). Clean MVVM architecture with Relay Commands. Live statistics dashboard.",
     coverImage: "/images/projects/building-inspection-tracker.png",
     gallery: [
       "/images/projects/building-inspection-tracker.png",
@@ -139,35 +141,35 @@ export const projectsData: Project[] = [
     ],
     technologies: ["C#", "WPF", "MVVM", ".NET", "XAML"],
     category: "Desktop Application",
-    tags: ["WPF", "Desktop", "Construction", "Inspection"],
+    tags: ["WPF", "Desktop", "Construction", "Inspection Management"],
     featured: true,
     status: "published",
-    createdAt: "2026-03-05",
-    updatedAt: "2026-03-05",
+    createdAt: "2026-02-01",
+    updatedAt: "2026-02-01",
   },
   {
     id: "6",
     slug: "company-management-system",
     title: "Company Management System",
     description:
-      "Console-based C# application for managing employees, departments, projects, and organizational dependencies.",
+      "Desktop application using C#, Entity Framework Core, SQL Server and SQLite for full CRUD management of employees, departments, and projects.",
     overview:
-      "A C# console application demonstrating object-oriented programming, Entity Framework, and database design principles. Manages employees, departments, projects, dependencies, and work assignments through a clean text-based interface.",
+      "A desktop management application using C#, Entity Framework Core, SQL Server, and SQLite with full CRUD functionality and relational database integration. Manages employees, departments, projects, dependencies, and work assignments. Implements layered architecture principles to support maintainability and future scalability.",
     challenge:
-      "Learning project to master C#, Entity Framework Core, and relational database design with real-world business domain modeling.",
+      "A learning project to master C#, Entity Framework Core, and relational database design with real-world business domain modeling including multi-entity relationships.",
     solution:
-      "Designed and implemented a multi-entity management system with proper relationships (Employee → Department, Employee → Project, Department dependencies, WorksFor assignments). Uses EF Core with BIMContext for data persistence.",
+      "Designed and implemented a multi-entity management system with proper relationships: Employee → Department, Employee → Project, Department dependencies, and WorksFor assignments. Uses EF Core with a structured DbContext for data persistence. Applied data validation and structured data management workflows.",
     results:
-      "Comprehensive CRUD operations for all entities. Clean architecture with separated concerns. Demonstrates proficiency in C#, EF Core, and database design patterns.",
+      "Comprehensive CRUD for all entities. Clean architecture with separated concerns. Demonstrates proficiency in C#, EF Core, SQL Server, and layered database design patterns.",
     coverImage: "/images/projects/company-management.png",
     gallery: ["/images/projects/company-management.png"],
-    technologies: ["C#", ".NET", "Entity Framework", "SQL Server"],
+    technologies: ["C#", ".NET", "Entity Framework Core", "SQL Server", "SQLite"],
     category: "Desktop Application",
-    tags: ["C#", "EF Core", "Database", "OOP"],
+    tags: ["C#", "EF Core", "Database", "OOP", "SQL Server"],
     featured: false,
     status: "published",
-    createdAt: "2025-03-01",
-    updatedAt: "2025-03-01",
+    createdAt: "2025-08-01",
+    updatedAt: "2025-08-01",
   },
 ];
 
@@ -175,6 +177,4 @@ export const projectCategories = [
   "All",
   "BIM Automation",
   "Desktop Application",
-  "Web Application",
-  "Engineering Tool",
 ] as const;

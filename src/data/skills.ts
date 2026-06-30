@@ -1,12 +1,11 @@
 export interface Skill {
   name: string;
-  proficiency: number; // 0-100
-  icon?: string;
+  proficiency: number;
 }
 
 export interface SkillCategory {
   id: string;
-  title: string;
+  name: string;
   description: string;
   skills: Skill[];
 }
@@ -14,104 +13,83 @@ export interface SkillCategory {
 export const skillsData: SkillCategory[] = [
   {
     id: "programming",
-    title: "Programming Languages",
-    description: "Core languages I use to build software solutions",
+    name: "Programming & Development",
+    description: "Core languages and development paradigms",
     skills: [
       { name: "C#", proficiency: 90 },
-      { name: "Python", proficiency: 85 },
-      { name: "JavaScript", proficiency: 75 },
-      { name: "TypeScript", proficiency: 70 },
-      { name: "SQL", proficiency: 80 },
-      { name: "HTML/CSS", proficiency: 80 },
+      { name: ".NET Framework / .NET Core", proficiency: 88 },
+      { name: "OOP & Design Principles", proficiency: 92 },
+      { name: "WPF Desktop Development", proficiency: 85 },
+      { name: "MVVM Architecture", proficiency: 87 },
+      { name: "Data Structures & Algorithms", proficiency: 80 },
     ],
   },
   {
-    id: "bim-revit",
-    title: "BIM & Revit",
-    description: "Building Information Modeling expertise and Revit API development",
+    id: "bim",
+    name: "BIM & AEC Development",
+    description: "BIM platforms, APIs, and automation tooling",
     skills: [
-      { name: "Autodesk Revit", proficiency: 95 },
       { name: "Revit API", proficiency: 90 },
-      { name: "BIM Coordination", proficiency: 85 },
-      { name: "Dynamo", proficiency: 80 },
-      { name: "Navisworks", proficiency: 75 },
-      { name: "AutoCAD", proficiency: 85 },
+      { name: "AutoCAD API", proficiency: 75 },
+      { name: "Dynamo", proficiency: 70 },
+      { name: "IFC & xBIM", proficiency: 68 },
+      { name: "BIM Automation Workflows", proficiency: 88 },
     ],
   },
   {
-    id: "desktop-dev",
-    title: "Desktop Development",
-    description: "Building robust desktop applications with modern frameworks",
-    skills: [
-      { name: "WPF (XAML)", proficiency: 85 },
-      { name: "MVVM Pattern", proficiency: 85 },
-      { name: ".NET Framework", proficiency: 90 },
-      { name: ".NET Core", proficiency: 80 },
-      { name: "Windows Forms", proficiency: 70 },
-    ],
-  },
-  {
-    id: "databases",
-    title: "Databases",
-    description: "Data storage and management solutions",
+    id: "data",
+    name: "Data & Databases",
+    description: "Data management and database integration",
     skills: [
       { name: "SQL Server", proficiency: 80 },
-      { name: "Entity Framework", proficiency: 80 },
-      { name: "PostgreSQL", proficiency: 70 },
-      { name: "LINQ", proficiency: 85 },
+      { name: "SQLite", proficiency: 78 },
+      { name: "Entity Framework Core", proficiency: 82 },
+      { name: "CRUD Operations", proficiency: 88 },
+      { name: "Database Design", proficiency: 78 },
+      { name: "Excel Integration", proficiency: 75 },
     ],
   },
   {
-    id: "ai-ml",
-    title: "AI & Machine Learning",
-    description: "Exploring intelligent solutions for engineering problems",
+    id: "ai",
+    name: "AI & Tools",
+    description: "AI workflows, development tools, and engineering software",
     skills: [
-      { name: "Machine Learning", proficiency: 65 },
-      { name: "Data Analysis", proficiency: 70 },
-      { name: "Pandas / NumPy", proficiency: 70 },
-      { name: "Computer Vision", proficiency: 55 },
-    ],
-  },
-  {
-    id: "engineering",
-    title: "Engineering Expertise",
-    description: "Civil engineering domain knowledge and professional skills",
-    skills: [
-      { name: "Structural Analysis", proficiency: 85 },
-      { name: "Reinforced Concrete", proficiency: 90 },
-      { name: "Construction Management", proficiency: 80 },
-      { name: "Quality Control", proficiency: 85 },
-      { name: "Project Management", proficiency: 75 },
-    ],
-  },
-  {
-    id: "tools",
-    title: "Tools & Software",
-    description: "Development tools and productivity software",
-    skills: [
+      { name: "Generative AI & Prompt Engineering", proficiency: 72 },
       { name: "Visual Studio", proficiency: 90 },
-      { name: "VS Code", proficiency: 85 },
-      { name: "Git / GitHub", proficiency: 80 },
-      { name: "Postman", proficiency: 70 },
-      { name: "Figma", proficiency: 60 },
+      { name: "Revit", proficiency: 85 },
+      { name: "AutoCAD", proficiency: 78 },
+      { name: "Git / Version Control", proficiency: 70 },
+    ],
+  },
+  {
+    id: "civil",
+    name: "Civil Engineering",
+    description: "Domain knowledge from civil engineering background",
+    skills: [
+      { name: "Highway & Pavement Engineering", proficiency: 85 },
+      { name: "Structural Engineering", proficiency: 78 },
+      { name: "Egyptian Concrete Code (ECP 203)", proficiency: 82 },
+      { name: "Full Depth Reclamation (FDR)", proficiency: 80 },
+      { name: "BIM Coordination", proficiency: 85 },
     ],
   },
 ];
 
 export const techStackLogos = [
   { name: "C#", category: "Language" },
-  { name: "Python", category: "Language" },
-  { name: "TypeScript", category: "Language" },
-  { name: "JavaScript", category: "Language" },
   { name: ".NET", category: "Framework" },
-  { name: "WPF", category: "Framework" },
-  { name: "Next.js", category: "Framework" },
-  { name: "React", category: "Framework" },
-  { name: "Revit API", category: "BIM" },
-  { name: "Dynamo", category: "BIM" },
-  { name: "AutoCAD", category: "BIM" },
+  { name: "WPF", category: "UI Framework" },
+  { name: "MVVM", category: "Architecture" },
+  { name: "Revit API", category: "BIM Platform" },
+  { name: "AutoCAD API", category: "BIM Platform" },
+  { name: "Entity Framework", category: "ORM" },
   { name: "SQL Server", category: "Database" },
-  { name: "PostgreSQL", category: "Database" },
-  { name: "Git", category: "Tool" },
-  { name: "Visual Studio", category: "Tool" },
+  { name: "SQLite", category: "Database" },
+  { name: "Dynamo", category: "Visual Scripting" },
+  { name: "IFC / xBIM", category: "Open BIM" },
+  { name: "Visual Studio", category: "IDE" },
+  { name: "Git", category: "Version Control" },
+  { name: "Generative AI", category: "AI Tools" },
+  { name: "Excel Integration", category: "Data" },
+  { name: "AutoCAD", category: "CAD Software" },
 ];
