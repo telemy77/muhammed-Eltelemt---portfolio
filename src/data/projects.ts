@@ -69,8 +69,8 @@ export const projectsData: Project[] = [
     tags: ["Revit", "BIM Health", "Analytics", "Model Review"],
     featured: true,
     status: "published",
-    createdAt: "2025-10-01",
-    updatedAt: "2025-10-01",
+    createdAt: "2026-06-01",
+    updatedAt: "2026-06-01",
   },
   {
     id: "3",
@@ -93,8 +93,8 @@ export const projectsData: Project[] = [
     tags: ["Revit", "Batch Processing", "Review", "Coordination"],
     featured: true,
     status: "published",
-    createdAt: "2025-11-01",
-    updatedAt: "2025-11-01",
+    createdAt: "2026-06-01",
+    updatedAt: "2026-06-01",
   },
   {
     id: "4",
@@ -117,8 +117,8 @@ export const projectsData: Project[] = [
     tags: ["Revit", "Data Export", "Audit", "Excel"],
     featured: false,
     status: "published",
-    createdAt: "2025-09-01",
-    updatedAt: "2025-09-01",
+    createdAt: "2026-06-01",
+    updatedAt: "2026-06-01",
   },
   {
     id: "5",
@@ -144,8 +144,8 @@ export const projectsData: Project[] = [
     tags: ["WPF", "Desktop", "Construction", "Inspection Management"],
     featured: true,
     status: "published",
-    createdAt: "2026-02-01",
-    updatedAt: "2026-02-01",
+    createdAt: "2026-06-01",
+    updatedAt: "2026-06-01",
   },
   {
     id: "6",
@@ -168,8 +168,8 @@ export const projectsData: Project[] = [
     tags: ["C#", "EF Core", "Database", "OOP", "SQL Server"],
     featured: false,
     status: "published",
-    createdAt: "2025-08-01",
-    updatedAt: "2025-08-01",
+    createdAt: "2026-06-01",
+    updatedAt: "2026-06-01",
   },
 ];
 
