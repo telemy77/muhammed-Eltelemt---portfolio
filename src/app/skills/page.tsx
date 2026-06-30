@@ -1,271 +1,116 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
-import { techStackLogos } from "@/data/skills";
-import type { SkillCategory } from "@/data/skills";
-import { db } from "@/lib/db";
+import { motion } from "framer-motion";
+import { skillsData, techStackLogos } from "@/data/skills";
 
-import {
-  Code2,
-  Building2,
-  Monitor,
-  Database,
-  Brain,
-  HardHat,
-  Wrench,
-  Layers,
-} from "lucide-react";
-
-/* ── helpers ────────────────────────────────────────────────────── */
-
-const categoryIcons: Record<string, React.ReactNode> = {
-  programming: <Code2 className="w-6 h-6" />,
-  "bim-revit": <Building2 className="w-6 h-6" />,
-  "desktop-dev": <Monitor className="w-6 h-6" />,
-  databases: <Database className="w-6 h-6" />,
-  "ai-ml": <Brain className="w-6 h-6" />,
-  engineering: <HardHat className="w-6 h-6" />,
-  tools: <Wrench className="w-6 h-6" />,
+const categoryColors: Record<string, string> = {
+  Language: "border-[#00D9FF]/30 text-[#00D9FF]",
+  Framework: "border-purple-400/30 text-purple-300",
+  "UI Framework": "border-purple-400/30 text-purple-300",
+  Architecture: "border-indigo-400/30 text-indigo-300",
+  "BIM Platform": "border-emerald-400/30 text-emerald-300",
+  ORM: "border-amber-400/30 text-amber-300",
+  Database: "border-amber-400/30 text-amber-300",
+  "Visual Scripting": "border-pink-400/30 text-pink-300",
+  "Open BIM": "border-teal-400/30 text-teal-300",
+  IDE: "border-slate-400/30 text-slate-300",
+  "Version Control": "border-orange-400/30 text-orange-300",
+  "AI Tools": "border-violet-400/30 text-violet-300",
+  Data: "border-green-400/30 text-green-300",
+  "CAD Software": "border-cyan-400/30 text-cyan-300",
 };
-
-const techCategoryColors: Record<string, string> = {
-  Language: "text-[#00D9FF]",
-  Framework: "text-purple-400",
-  BIM: "text-emerald-400",
-  Database: "text-amber-400",
-  Tool: "text-rose-400",
-};
-
-const techCategoryBorders: Record<string, string> = {
-  Language: "hover:border-[#00D9FF]/40 hover:shadow-[0_0_25px_rgba(0,217,255,0.15)]",
-  Framework: "hover:border-purple-400/40 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)]",
-  BIM: "hover:border-emerald-400/40 hover:shadow-[0_0_25px_rgba(52,211,153,0.15)]",
-  Database: "hover:border-amber-400/40 hover:shadow-[0_0_25px_rgba(251,191,36,0.15)]",
-  Tool: "hover:border-rose-400/40 hover:shadow-[0_0_25px_rgba(251,113,133,0.15)]",
-};
-
-/* ── Animated Proficiency Bar ───────────────────────────────────── */
-
-function ProficiencyBar({
-  name,
-  proficiency,
-  index,
-}: {
-  name: string;
-  proficiency: number;
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <div ref={ref} className="space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-200">{name}</span>
-        <motion.span
-          className="text-sm font-semibold text-[#00D9FF]"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: index * 0.1 + 0.4, duration: 0.4 }}
-        >
-          {proficiency}%
-        </motion.span>
-      </div>
-
-      {/* bar background */}
-      <div className="relative h-2.5 w-full rounded-full bg-white/5 overflow-hidden">
-        <motion.div
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#00D9FF] to-[#0066FF]"
-          initial={{ width: 0 }}
-          animate={isInView ? { width: `${proficiency}%` } : { width: 0 }}
-          transition={{
-            delay: index * 0.1 + 0.2,
-            duration: 0.9,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        />
-        {/* glow tip */}
-        <motion.div
-          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#00D9FF] blur-[6px]"
-          initial={{ left: 0, opacity: 0 }}
-          animate={
-            isInView
-              ? { left: `${proficiency}%`, opacity: 1 }
-              : { left: 0, opacity: 0 }
-          }
-          transition={{
-            delay: index * 0.1 + 0.2,
-            duration: 0.9,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ── Category Card ──────────────────────────────────────────────── */
-
-function CategoryCard({
-  category,
-  index,
-}: {
-  category: (typeof skillsData)[number];
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 hover:border-[#00D9FF]/20 transition-colors duration-500"
-    >
-      {/* header */}
-      <div className="flex items-center gap-3 mb-2">
-        <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#00D9FF]/20 to-[#0066FF]/10 text-[#00D9FF]">
-          {categoryIcons[category.id] ?? <Layers className="w-6 h-6" />}
-        </div>
-        <h3 className="text-xl font-semibold font-playfair text-white">
-          {category.title}
-        </h3>
-      </div>
-      <p className="text-sm text-slate-400 mb-6">{category.description}</p>
-
-      {/* skill bars */}
-      <div className="space-y-4">
-        {category.skills.map((skill, i) => (
-          <ProficiencyBar
-            key={skill.name}
-            name={skill.name}
-            proficiency={skill.proficiency}
-            index={i}
-          />
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-/* ── Tech Stack Card ────────────────────────────────────────────── */
-
-function TechCard({
-  tech,
-  index,
-}: {
-  tech: (typeof techStackLogos)[number];
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
-      transition={{ duration: 0.45, delay: index * 0.04 }}
-      className={`group bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 flex flex-col items-center gap-3 cursor-default transition-all duration-300 hover:scale-105 ${
-        techCategoryBorders[tech.category] ?? ""
-      }`}
-    >
-      {/* icon placeholder — large initial */}
-      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-2xl font-bold text-white group-hover:from-[#00D9FF]/20 group-hover:to-[#0066FF]/10 transition-all duration-300">
-        {tech.name.charAt(0)}
-      </div>
-      <span className="text-sm font-medium text-white text-center leading-tight">
-        {tech.name}
-      </span>
-      <span
-        className={`text-xs font-medium ${
-          techCategoryColors[tech.category] ?? "text-slate-400"
-        }`}
-      >
-        {tech.category}
-      </span>
-    </motion.div>
-  );
-}
-
-/* ── Page ────────────────────────────────────────────────────────── */
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState<SkillCategory[]>([]);
-  useEffect(() => {
-    setSkills(db.getSkills());
-  }, []);
-
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroInView = useInView(heroRef, { once: true });
-
   return (
     <main className="min-h-screen bg-[#0F172A] pt-28 pb-24 px-6">
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section ref={heroRef} className="max-w-7xl mx-auto text-center mb-20">
+      <div className="max-w-4xl mx-auto">
+
+        {/* ── Hero ── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
         >
-          <span className="inline-block text-[#00D9FF] text-sm font-semibold tracking-widest uppercase mb-4">
-            What I Bring to the Table
-          </span>
-          <h1 className="text-4xl md:text-6xl font-bold font-playfair text-white mb-5">
-            Skills{" "}
-            <span className="bg-gradient-to-r from-[#00D9FF] to-[#0066FF] bg-clip-text text-transparent">
-              &amp; Expertise
-            </span>
+          <p className="text-[#00D9FF] text-xs font-medium tracking-widest uppercase mb-2">
+            Skills
+          </p>
+          <h1 className="text-4xl md:text-5xl font-bold font-playfair text-white mb-4">
+            Tools & Technologies
           </h1>
-          <p className="max-w-2xl mx-auto text-slate-400 text-lg leading-relaxed">
-            From civil engineering foundations to full‑stack BIM automation — a
-            comprehensive toolkit built through years of hands‑on practice and
-            continuous learning.
+          <p className="text-slate-400 text-lg max-w-xl leading-relaxed">
+            The languages, frameworks, platforms, and tools I work with — built through the ITI BIM
+            Automation Developer Program and real-world engineering projects.
           </p>
         </motion.div>
-      </section>
 
-      {/* ── Skill Categories Grid ────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto mb-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {skills.map((cat, i) => (
-            <CategoryCard key={cat.id} category={cat} index={i} />
+        {/* ── Skill Groups ── */}
+        <div className="space-y-12 mb-20">
+          {skillsData.map((category, ci) => (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: ci * 0.08, duration: 0.5 }}
+            >
+              <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4 border-b border-white/8 pb-2">
+                {category.name}
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {category.skills.map((skill) => (
+                  <span
+                    key={skill.name}
+                    className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/4 text-slate-200 text-sm hover:border-[#00D9FF]/30 hover:bg-white/8 transition-all duration-200"
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           ))}
         </div>
-      </section>
 
+        {/* ── Tools Grid ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-10"
+        >
+          <p className="text-[#00D9FF] text-xs font-medium tracking-widest uppercase mb-2">
+            Tech Stack
+          </p>
+          <h2 className="text-2xl md:text-3xl font-bold font-playfair text-white mb-8">
+            Tools I Work With
+          </h2>
+        </motion.div>
 
-      {/* ── Technology Stack ─────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto">
-        <div className="text-center mb-14">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block text-[#00D9FF] text-sm font-semibold tracking-widest uppercase mb-4">
-              Technology Stack
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold font-playfair text-white mb-4">
-              Tools I Work With
-            </h2>
-            <p className="max-w-xl mx-auto text-slate-400">
-              The technologies, frameworks, and platforms I use daily to deliver
-              high‑quality solutions.
-            </p>
-          </motion.div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {techStackLogos.map((tech, i) => (
-            <TechCard key={tech.name} tech={tech} index={i} />
+            <motion.div
+              key={tech.name}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.04, duration: 0.4 }}
+              className="flex items-center gap-3 p-3.5 rounded-xl border border-white/8 bg-white/3 hover:border-[#00D9FF]/25 hover:bg-white/6 transition-all duration-200 group"
+            >
+              {/* Initial avatar */}
+              <div className="w-9 h-9 rounded-lg bg-white/8 flex items-center justify-center flex-shrink-0 font-bold text-white text-sm group-hover:bg-[#00D9FF]/15 transition-colors">
+                {tech.name.charAt(0)}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-white truncate">{tech.name}</p>
+                <p className={`text-[10px] ${categoryColors[tech.category] ?? "text-slate-500"}`}>
+                  {tech.category}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </div>
     </main>
   );
 }

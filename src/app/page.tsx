@@ -321,32 +321,27 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="space-y-3"
+              className="flex flex-wrap gap-2"
             >
               {[
-                { label: "C# / .NET / WPF", bar: 90 },
-                { label: "Revit API", bar: 90 },
-                { label: "MVVM Architecture", bar: 87 },
-                { label: "Entity Framework Core", bar: 82 },
-                { label: "BIM Automation Workflows", bar: 88 },
+                "C#", ".NET", "WPF", "MVVM", "Revit API",
+                "AutoCAD API", "Entity Framework Core", "SQL Server",
+                "SQLite", "Dynamo", "IFC / xBIM", "Generative AI",
+                "OOP", "Data Structures", "Visual Studio",
               ].map((skill, i) => (
-                <div key={skill.label}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-300">{skill.label}</span>
-                    <span className="text-slate-500">{skill.bar}%</span>
-                  </div>
-                  <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.bar}%` }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.08, duration: 0.8, ease: "easeOut" }}
-                      className="h-full rounded-full bg-gradient-to-r from-[#00D9FF] to-[#0066FF]"
-                    />
-                  </div>
-                </div>
+                <motion.span
+                  key={skill}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04, duration: 0.3 }}
+                  className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/4 text-slate-200 text-sm hover:border-[#00D9FF]/30 hover:bg-white/8 transition-all duration-200"
+                >
+                  {skill}
+                </motion.span>
               ))}
             </motion.div>
+
           </div>
         </div>
       </section>
