@@ -1,10 +1,15 @@
 "use client";
 
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
-import type { Experience, Education, Certification } from "@/data/experience";
-import type { SkillCategory } from "@/data/skills";
-import { db } from "@/lib/db";
+import {
+  certificationsData,
+  educationData,
+  experienceData,
+  type Education,
+  type Experience,
+} from "@/data/experience";
+import { skillsData } from "@/data/skills";
 import {
   Download,
   MapPin,
@@ -21,7 +26,7 @@ import {
 interface TimelineEntry {
   kind: "experience" | "education";
   id: string;
-  title: string; // role or degree + field
+  title: string; // role or degree
   subtitle: string; // company or institution
   description: string;
   startDate: string;
@@ -49,7 +54,6 @@ function buildTimeline(
       endDate: e.endDate,
       current: e.current,
       tags: e.technologies,
-      achievements: e.achievements,
     })
   );
 
@@ -57,7 +61,7 @@ function buildTimeline(
     entries.push({
       kind: "education",
       id: `edu-${e.id}`,
-      title: `${e.degree} — ${e.field}`,
+      title: e.degree,
       subtitle: e.institution,
       description: e.description,
       startDate: e.startDate,
@@ -80,6 +84,7 @@ function buildTimeline(
 
 function formatDate(d: string): string {
   if (d.length <= 4) return d; // plain year
+  if (!d.includes("-")) return d;
   const [y, m] = d.split("-");
   const monthNames = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -250,21 +255,9 @@ function CertCard({
 /* ── Page ────────────────────────────────────────────────────────── */
 
 export default function ResumePage() {
-  const [experience, setExperience] = useState<Experience[]>([]);
-  const [education, setEducation] = useState<Education[]>([]);
-  const [certifications, setCertifications] = useState<Certification[]>([]);
-  const [skills, setSkills] = useState<SkillCategory[]>([]);
-
-  useEffect(() => {
-    setExperience(db.getExperience());
-    setEducation(db.getEducation());
-    setCertifications(db.getCertifications());
-    setSkills(db.getSkills());
-  }, []);
-
   const timeline = useMemo(() => {
-    return buildTimeline(experience, education);
-  }, [experience, education]);
+    return buildTimeline(experienceData, educationData);
+  }, []);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInView = useInView(heroRef, { once: true });
@@ -364,7 +357,7 @@ export default function ResumePage() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {certifications.map((c, i) => (
+          {certificationsData.map((c, i) => (
             <CertCard key={c.id} cert={c} index={i} />
           ))}
         </div>
@@ -388,7 +381,7 @@ export default function ResumePage() {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skills.map((cat, ci) => {
+          {skillsData.map((cat, ci) => {
             const top = cat.skills
               .slice()
               .sort((a, b) => b.proficiency - a.proficiency)
@@ -404,7 +397,7 @@ export default function ResumePage() {
                 className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5"
               >
                 <h4 className="text-sm font-semibold text-white mb-3">
-                  {cat.title}
+                  {cat.name}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {top.map((s) => (

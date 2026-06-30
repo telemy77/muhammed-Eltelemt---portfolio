@@ -11,6 +11,8 @@ export interface Project {
   gallery: string[];
   videoUrl?: string;
   youtubeUrl?: string;
+  directUrl?: string;
+  directUrlLabel?: string;
   logoImage?: string;
   technologies: string[];
   category: string;

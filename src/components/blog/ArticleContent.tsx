@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
@@ -16,7 +16,6 @@ import {
   BookOpen,
 } from "lucide-react";
 import { type BlogPost } from "@/data/blog";
-import { db } from "@/lib/db";
 
 
 /* ─── helpers ─── */
@@ -132,7 +131,7 @@ function parseContent(raw: string): ContentBlock[] {
 /* ─── inline formatting (bold, inline code) ─── */
 function renderInline(text: string) {
   // Process **bold** and `inline code`
-  const parts: (string | JSX.Element)[] = [];
+  const parts: React.ReactNode[] = [];
   const regex = /(\*\*(.+?)\*\*|`(.+?)`)/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -355,25 +354,9 @@ interface ArticleContentProps {
 }
 
 export default function ArticleContent({
-  post: initialPost,
-  relatedPosts: initialRelatedPosts,
+  post,
+  relatedPosts,
 }: ArticleContentProps) {
-  const [post, setPost] = useState(initialPost);
-  const [relatedPosts, setRelatedPosts] = useState(initialRelatedPosts);
-
-  useEffect(() => {
-    const livePost = db.getBlogPostBySlug(initialPost.slug);
-    if (livePost) {
-      setPost(livePost);
-    }
-    const livePosts = db.getBlogPosts()
-      .filter((p) => p.status === "published" && p.slug !== initialPost.slug)
-      .slice(0, 2);
-    if (livePosts.length > 0) {
-      setRelatedPosts(livePosts);
-    }
-  }, [initialPost.slug]);
-
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,

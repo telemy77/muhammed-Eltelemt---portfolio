@@ -1,13 +1,26 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { projectsData } from "@/data/projects";
+import { promises as fs } from "fs";
+import path from "path";
+import { Project } from "@/data/projects";
 import ProjectDetail from "@/components/projects/ProjectDetail";
 import { siteConfig } from "@/lib/constants";
+
+async function getProjectsData(): Promise<Project[]> {
+  try {
+    const dataPath = path.resolve(process.cwd(), "src/data/projects.json");
+    const content = await fs.readFile(dataPath, "utf-8");
+    return JSON.parse(content);
+  } catch (e) {
+    return [];
+  }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Static params                                                      */
 /* ------------------------------------------------------------------ */
 export async function generateStaticParams() {
+  const projectsData = await getProjectsData();
   return projectsData
     .filter((p) => p.status === "published")
     .map((p) => ({ slug: p.slug }));
@@ -22,6 +35,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const projectsData = await getProjectsData();
   const project = projectsData.find((p) => p.slug === slug);
 
   if (!project) {
@@ -62,39 +76,40 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const projectsData = await getProjectsData();
 
-  const publishedProjects = projectsData.filter(
-    (p) => p.status === "published"
-  );
-  const currentIndex = publishedProjects.findIndex((p) => p.slug === slug);
+  const liveProjects = projectsData.filter((p) => p.status === "published");
+  const currentIndex = liveProjects.findIndex((p) => p.slug === slug);
 
   if (currentIndex === -1) {
     notFound();
   }
 
-  const project = publishedProjects[currentIndex];
+  const project = liveProjects[currentIndex];
 
   const prevProject =
     currentIndex > 0
       ? {
-          slug: publishedProjects[currentIndex - 1].slug,
-          title: publishedProjects[currentIndex - 1].title,
+          slug: liveProjects[currentIndex - 1].slug,
+          title: liveProjects[currentIndex - 1].title,
         }
       : null;
 
   const nextProject =
-    currentIndex < publishedProjects.length - 1
+    currentIndex < liveProjects.length - 1
       ? {
-          slug: publishedProjects[currentIndex + 1].slug,
-          title: publishedProjects[currentIndex + 1].title,
+          slug: liveProjects[currentIndex + 1].slug,
+          title: liveProjects[currentIndex + 1].title,
         }
       : null;
 
   return (
-    <ProjectDetail
-      project={project}
-      prevProject={prevProject}
-      nextProject={nextProject}
-    />
+    <main className="min-h-screen bg-[#0F172A]">
+      <ProjectDetail
+        project={project}
+        prevProject={prevProject}
+        nextProject={nextProject}
+      />
+    </main>
   );
 }

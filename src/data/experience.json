@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "role": "Junior Highway Design Engineer",
+    "company": "PowerCem Technology Regional",
+    "location": "Cairo, Egypt",
+    "startDate": "Jan 2024",
+    "endDate": "Jan 2026",
+    "current": false,
+    "description": "Specialized in advanced road reclamation (Full Depth Reclamation — FDR) and diagnostic pavement evaluations for infrastructure rehabilitation projects across Egypt.",
+    "technologies": ["Highway Design", "FDR", "Pavement Evaluation", "AutoCAD"]
+  },
+  {
+    "id": "2",
+    "role": "Lab Engineer",
+    "company": "Highway & Airport Engineering Laboratory (H&AE Lab), Mansoura University",
+    "location": "Mansoura, Egypt",
+    "startDate": "Feb 2024",
+    "endDate": "Apr 2024",
+    "current": false,
+    "description": "Conducted Quality Control road tests and Superpave mix design performance testing in the H&AE Laboratory. Performed Sand Cone Test, Extraction Test, Dynamic Shear Rheometer (DSR), Bulk Gravity (BG), and Gmb measurements. Also ran Superpave performance tests including IDT, E*, Flow Number, and Gmm.",
+    "technologies": ["Sand Cone Test", "Extraction Test", "DSR", "Superpave", "IDT", "E*", "Flow Number", "Gmm / Gmb"]
+  }
+]

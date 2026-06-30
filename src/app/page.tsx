@@ -356,7 +356,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-4">
-              Let's work together
+              Let&apos;s work together
             </h2>
             <p className="text-slate-400 mb-8 max-w-md mx-auto">
               Open to opportunities in BIM software development, AEC tool building, and engineering

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Briefcase,
   GraduationCap,
@@ -9,9 +9,43 @@ import {
   Calendar,
   MapPin,
   ExternalLink,
+  X,
 } from "lucide-react";
-import type { Experience, Education, Certification } from "@/data/experience";
-import { db } from "@/lib/db";
+
+interface Experience {
+  id: string;
+  role: string;
+  company: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  current: boolean;
+  description: string;
+  technologies: string[];
+}
+interface Education {
+  id: string;
+  degree: string;
+  institution: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  current: boolean;
+  description: string;
+  grade?: string;
+}
+interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  url?: string;
+  image?: string;
+}
+
+import experienceDataJson from "@/data/experience.json";
+import certificationsDataJson from "@/data/certifications.json";
+import { educationData } from "@/data/experience";
 
 /* ── Animated wrapper ───────────────────────────────────────────── */
 function Reveal({
@@ -110,13 +144,22 @@ function EducationCard({ item, index }: { item: Education; index: number }) {
 }
 
 /* ── Certification badge ─────────────────────────────────────────── */
-function CertBadge({ item, index }: { item: Certification; index: number }) {
+function CertBadge({ item, index, onClickImage }: { item: Certification; index: number; onClickImage: (url: string) => void }) {
   return (
     <Reveal delay={index * 0.1}>
       <div className="flex items-center gap-4 p-4 rounded-2xl border border-white/8 bg-white/3 hover:border-[#00D9FF]/30 transition-colors">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00D9FF] to-[#0066FF] flex items-center justify-center flex-shrink-0">
-          <Award size={16} className="text-white" />
-        </div>
+        {item.image ? (
+          <button onClick={() => onClickImage(item.image!)} className="w-12 h-12 rounded-lg overflow-hidden border border-white/10 flex-shrink-0 relative group">
+            <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <Award size={14} className="text-white" />
+            </div>
+          </button>
+        ) : (
+          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00D9FF] to-[#0066FF] flex items-center justify-center flex-shrink-0">
+            <Award size={18} className="text-white" />
+          </div>
+        )}
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-white text-sm">{item.name}</h3>
           <p className="text-slate-400 text-xs">
@@ -140,15 +183,10 @@ function CertBadge({ item, index }: { item: Certification; index: number }) {
 
 /* ── Page ────────────────────────────────────────────────────────── */
 export default function ExperiencePage() {
-  const [experience, setExperience] = useState<Experience[]>([]);
-  const [education, setEducation] = useState<Education[]>([]);
-  const [certifications, setCertifications] = useState<Certification[]>([]);
-
-  useEffect(() => {
-    setExperience(db.getExperience());
-    setEducation(db.getEducation());
-    setCertifications(db.getCertifications());
-  }, []);
+  const [modalImage, setModalImage] = useState<string | null>(null);
+  const experience = experienceDataJson as Experience[];
+  const education = educationData as Education[];
+  const certifications = certificationsDataJson as Certification[];
 
   return (
     <main className="min-h-screen bg-[#0F172A] pt-28 pb-24">
@@ -217,12 +255,41 @@ export default function ExperiencePage() {
             </Reveal>
             <div className="space-y-3">
               {certifications.map((cert, i) => (
-                <CertBadge key={cert.id} item={cert} index={i} />
+                <CertBadge key={cert.id} item={cert} index={i} onClickImage={setModalImage} />
               ))}
             </div>
           </section>
         )}
       </div>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {modalImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setModalImage(null)}
+          >
+            <button
+              onClick={() => setModalImage(null)}
+              className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              src={modalImage}
+              alt="Certificate"
+              className="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Search, X, Layers, Calendar, ArrowRight } from "lucide-react";
-import { projectCategories } from "@/data/projects";
+import { projectCategories, projectsData } from "@/data/projects";
 import type { Project } from "@/data/projects";
 import { cn, formatDate } from "@/lib/utils";
-import { db } from "@/lib/db";
 
 
 /* ------------------------------------------------------------------ */
@@ -245,14 +244,9 @@ function EmptyState({ search }: { search: string }) {
 export default function ProjectsPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    setProjects(db.getProjects());
-  }, []);
 
   const filteredProjects = useMemo(() => {
-    return projects
+    return projectsData
       .filter((p) => p.status === "published")
       .filter((p) => {
         if (activeCategory !== "All" && p.category !== activeCategory)
@@ -270,7 +264,7 @@ export default function ProjectsPage() {
 
         return true;
       });
-  }, [search, activeCategory, projects]);
+  }, [search, activeCategory]);
 
 
   return (

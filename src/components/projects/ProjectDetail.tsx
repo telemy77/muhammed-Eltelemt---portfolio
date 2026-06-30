@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { cn, formatDate } from "@/lib/utils";
-import { db } from "@/lib/db";
 
 
 /* ------------------------------------------------------------------ */
@@ -189,41 +188,10 @@ function ShareButtons({ title }: { title: string }) {
 /*  Main Component                                                     */
 /* ------------------------------------------------------------------ */
 export default function ProjectDetail({
-  project: initialProject,
-  prevProject: initialPrevProject,
-  nextProject: initialNextProject,
+  project,
+  prevProject,
+  nextProject,
 }: ProjectDetailProps) {
-  const [project, setProject] = useState(initialProject);
-  const [prevProject, setPrevProject] = useState(initialPrevProject);
-  const [nextProject, setNextProject] = useState(initialNextProject);
-
-  useEffect(() => {
-    const liveProj = db.getProjectBySlug(initialProject.slug);
-    if (liveProj) {
-      setProject(liveProj);
-    }
-    const liveProjects = db.getProjects().filter((p) => p.status === "published");
-    const currentIndex = liveProjects.findIndex((p) => p.slug === initialProject.slug);
-    if (currentIndex !== -1) {
-      setPrevProject(
-        currentIndex > 0
-          ? {
-              slug: liveProjects[currentIndex - 1].slug,
-              title: liveProjects[currentIndex - 1].title,
-            }
-          : null
-      );
-      setNextProject(
-        currentIndex < liveProjects.length - 1
-          ? {
-              slug: liveProjects[currentIndex + 1].slug,
-              title: liveProjects[currentIndex + 1].title,
-            }
-          : null
-      );
-    }
-  }, [initialProject.slug]);
-
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -340,6 +308,17 @@ export default function ProjectDetail({
                   {formatDate(project.createdAt)}
                 </span>
                 <ShareButtons title={project.title} />
+                {project.directUrl && (
+                  <a
+                    href={project.directUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-auto inline-flex items-center gap-2 px-5 py-2.5 bg-[#00D9FF] text-[#0F172A] text-sm font-semibold rounded-lg hover:bg-[#00D9FF]/90 transition-colors"
+                  >
+                    {project.directUrlLabel || "Direct Link"}
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             </motion.div>
           </div>

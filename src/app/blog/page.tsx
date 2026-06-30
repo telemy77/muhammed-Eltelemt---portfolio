@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Calendar, Clock, User, ArrowRight, BookOpen } from "lucide-react";
-import { blogCategories, type BlogPost } from "@/data/blog";
-import { db } from "@/lib/db";
+import { blogCategories, blogPostsData, type BlogPost } from "@/data/blog";
 
 
 /* ─── animation helpers ─── */
@@ -130,14 +129,9 @@ function ArticleCard({ post, index }: { post: BlogPost; index: number }) {
 export default function BlogPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-
-  useEffect(() => {
-    setPosts(db.getBlogPosts());
-  }, []);
 
   const filtered = useMemo(() => {
-    let published = posts.filter((p) => p.status === "published");
+    let published = blogPostsData.filter((p) => p.status === "published");
 
     if (activeCategory !== "All") {
       published = published.filter((p) => p.category === activeCategory);
@@ -154,7 +148,7 @@ export default function BlogPage() {
     }
 
     return published;
-  }, [search, activeCategory, posts]);
+  }, [search, activeCategory]);
 
 
   return (
