@@ -41,7 +41,8 @@ export const projectsData: Project[] = [
     coverImage: "/images/projects/rebarx-logo.png",
     logoImage: "/images/projects/rebarx-logo.png",
     gallery: ["/images/projects/rebarx-logo.png"],
-    videoUrl: "/videos/rebarx-demo.mp4",
+    videoUrl: "",
+
     technologies: ["C#", ".NET Framework", "Revit API", "WPF", "MVVM"],
     category: "BIM Automation",
     tags: ["Revit", "Structural", "Reinforcement", "Automation", "ECP 203"],
