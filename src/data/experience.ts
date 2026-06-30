@@ -40,8 +40,29 @@ export const experienceData: Experience[] = [
     endDate: "Jan 2026",
     current: false,
     description:
-      "Specialized in advanced road reclamation (Full Depth Reclamation — FDR) and diagnostic pavement evaluations. Worked on road condition assessments and technical documentation for infrastructure rehabilitation projects.",
+      "Specialized in advanced road reclamation (Full Depth Reclamation — FDR) and diagnostic pavement evaluations for infrastructure rehabilitation projects across Egypt.",
     technologies: ["Highway Design", "FDR", "Pavement Evaluation", "AutoCAD"],
+  },
+  {
+    id: "2",
+    role: "Lab Engineer",
+    company: "Highway & Airport Engineering Laboratory (H&AE Lab), Mansoura University",
+    location: "Mansoura, Egypt",
+    startDate: "Feb 2024",
+    endDate: "Apr 2024",
+    current: false,
+    description:
+      "Conducted Quality Control road tests and Superpave mix design performance testing in the H&AE Laboratory. Performed Sand Cone Test, Extraction Test, Dynamic Shear Rheometer (DSR), Bulk Gravity (BG), and Gmb measurements. Also ran Superpave performance tests including IDT, E*, Flow Number, and Gmm.",
+    technologies: [
+      "Sand Cone Test",
+      "Extraction Test",
+      "DSR",
+      "Superpave",
+      "IDT",
+      "E*",
+      "Flow Number",
+      "Gmm / Gmb",
+    ],
   },
 ];
 
@@ -51,7 +72,7 @@ export const educationData: Education[] = [
     degree: "BIM Automation Developer Program",
     institution: "Information Technology Institute (ITI)",
     location: "Cairo, Egypt",
-    startDate: "2026",
+    startDate: "Apr 2024",
     endDate: "Present",
     current: true,
     description:
@@ -61,26 +82,26 @@ export const educationData: Education[] = [
   {
     id: "2",
     degree: "Preliminary MA — Public Works Engineering",
-    institution: "Mansoura University",
+    institution: "Faculty of Engineering, Mansoura University",
     location: "Mansoura, Egypt",
     startDate: "2023",
     endDate: "Present",
     current: true,
     description:
-      "Specialization in Highway and Airport Engineering at the Public Works Engineering Department.",
+      "Specialization in Highway and Airport Engineering. Courses include Advanced Pavement Materials, Structural Design and Analysis using AASHTO93 & AASHTOWare.",
     grade: "Excellent",
   },
   {
     id: "3",
-    degree: "Bachelor of Science in Civil Engineering",
-    institution: "Mansoura University",
+    degree: "B.Sc. Civil Engineering",
+    institution: "Faculty of Engineering, Mansoura University",
     location: "Mansoura, Egypt",
     startDate: "2018",
     endDate: "2023",
     current: false,
     description:
-      "Graduation Project: Highway & Airport — Superpave Asphalt Mix Designs. Comprehensive study of structural, geotechnical, highway, and construction engineering.",
-    grade: "Excellent",
+      "Specialized in Highway and Airport Engineering. Graduation Project: Geometric Design of Rural & Urban Roads + Asphalt Mix Design Using Superpave.",
+    grade: "Good — Graduation Project: Excellent",
   },
 ];
 
@@ -89,6 +110,6 @@ export const certificationsData: Certification[] = [
     id: "1",
     name: "BIM Automation Developer Program",
     issuer: "Information Technology Institute (ITI)",
-    date: "2026",
+    date: "2024",
   },
 ];
