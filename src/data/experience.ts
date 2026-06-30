@@ -72,9 +72,9 @@ export const educationData: Education[] = [
     degree: "BIM Automation Developer Program",
     institution: "Information Technology Institute (ITI)",
     location: "Cairo, Egypt",
-    startDate: "Apr 2024",
-    endDate: "Present",
-    current: true,
+    startDate: "Jan 2026",
+    endDate: "Jun 2026",
+    current: false,
     description:
       "460-hour intensive program focused on software development and BIM automation. Key topics: C#, .NET, OOP, Data Structures & Algorithms, Desktop Application Development, Revit API, AutoCAD API, Dynamo, IFC & xBIM, Database Fundamentals, Generative AI & Prompt Engineering. Project-based learning with real-world BIM automation solutions.",
     grade: "In Progress",
@@ -110,6 +110,6 @@ export const certificationsData: Certification[] = [
     id: "1",
     name: "BIM Automation Developer Program",
     issuer: "Information Technology Institute (ITI)",
-    date: "2024",
+    date: "2026",
   },
 ];
